@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desserts - Recipe Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #292f36;
+            --light: #f7fff7;
+            --accent: #ffe66d;
+            --dessert: #d4a5c5;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .filter-title {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 18px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--dessert);
+            color: white;
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        /* Recipe Grid */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .recipe-time {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .recipe-content {
+            padding: 20px;
+        }
+
+        .recipe-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .recipe-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .recipe-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Recipe Detail Section */
+        .recipe-detail {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 60px;
+        }
+
+        .recipe-hero {
+            display: flex;
+            min-height: 400px;
+        }
+
+        .recipe-image {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .recipe-info {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .recipe-info h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .recipe-description {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .recipe-meta-large {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 100px;
+        }
+
+        .meta-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--dessert);
+        }
+
+        .meta-value {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .meta-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .recipe-detail-content {
+            display: flex;
+            padding: 0;
+        }
+
+        .ingredients-section, .instructions-section {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .ingredients-section {
+            background: #f9f9f9;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--dessert);
+        }
+
+        .ingredients-list {
+            list-style: none;
+        }
+
+        .ingredients-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ingredients-list li:last-child {
+            border-bottom: none;
+        }
+
+        .ingredients-list i {
+            color: var(--dessert);
+        }
+
+        .instructions-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .instructions-list li {
+            counter-increment: step-counter;
+            padding: 20px 0 20px 50px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .instructions-list li:last-child {
+            border-bottom: none;
+        }
+
+        .instructions-list li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 20px;
+            background: var(--dessert);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 36px;
+            }
+
+            .page-header p {
+                font-size: 18px;
+            }
+
+            .recipe-hero, .recipe-detail-content {
+                flex-direction: column;
+            }
+
+            .recipe-image {
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Recipe Hub</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="appetizers.html">Appetizers</a>
+                    <a href="#">Main Courses</a>
+                    <a href="desserts.html" class="active">Desserts</a>
+                    <a href="#">About</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Login</button>
+                    <button class="btn btn-primary">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Sweet Desserts</h1>
+            <p>Indulge in these delicious dessert recipes that are perfect for any occasion, from simple treats to show-stopping finales.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <section class="filters">
+            <h3 class="filter-title">Filter by:</h3>
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="chocolate">Chocolate</button>
+                <button class="filter-btn" data-filter="fruit">Fruit</button>
+                <button class="filter-btn" data-filter="no-bake">No-Bake</button>
+                <button class="filter-btn" data-filter="vegan">Vegan</button>
+                <button class="filter-btn" data-filter="gluten-free">Gluten-Free</button>
+                <button class="filter-btn" data-filter="quick">Quick & Easy</button>
+            </div>
+        </section>
+
+        <!-- Recipe Grid -->
+        <section class="recipe-grid">
+            <div class="recipe-card" data-category="chocolate quick">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 45 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Chocolate Lava Cake</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 4 servings</span>
+                        <span><i class="fas fa-signal"></i> Medium</span>
+                    </div>
+                    <p>Decadent individual chocolate cakes with a warm, gooey center that flows out when cut into.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Chocolate</span>
+                        <span class="tag">Quick & Easy</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="fruit no-bake">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 20 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Berry Parfait</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 2 servings</span>
+                        <span><i class="fas fa-signal"></i> Easy</span>
+                    </div>
+                    <p>Layers of yogurt, granola, and fresh berries for a healthy and delicious dessert.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Fruit</span>
+                        <span class="tag">No-Bake</span>
+                        <span class="tag">Quick & Easy</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="fruit gluten-free">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 60 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Classic Cheesecake</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 8 servings</span>
+                        <span><i class="fas fa-signal"></i> Medium</span>
+                    </div>
+                    <p>Creamy, rich cheesecake with a graham cracker crust and berry topping.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Fruit</span>
+                        <span class="tag">Gluten-Free Option</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Recipe 1 -->
+        <section class="recipe-detail">
+            <div class="recipe-hero">
+                <div class="recipe-image" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="recipe-info">
+                    <h2>Chocolate Lava Cake</h2>
+                    <p class="recipe-description">Indulge in these decadent individual chocolate cakes with a warm, gooey center that flows out when cut into. Perfect for chocolate lovers and impressive enough for dinner parties.</p>
+                    <div class="recipe-meta-large">
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-clock"></i></div>
+                            <div class="meta-value">45 mins</div>
+                            <div class="meta-label">Prep & Cook</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-user-friends"></i></div>
+                            <div class="meta-value">4</div>
+                            <div class="meta-label">Servings</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-signal"></i></div>
+                            <div class="meta-value">Medium</div>
+                            <div class="meta-label">Difficulty</div>
+                        </div>
+                    </div>
+                    <div class="recipe-tags">
+                        <span class="tag">Chocolate</span>
+                        <span class="tag">Baking</span>
+                        <span class="tag">Vegetarian</span>
+                        <span class="tag">Special Occasion</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recipe-detail-content">
+                <div class="ingredients-section">
+                    <h3 class="section-title"><i class="fas fa-shopping-basket"></i> Ingredients</h3>
+                    <ul class="ingredients-list">
+                        <li><i class="fas fa-check-circle"></i> 1/2 cup unsalted butter</li>
+                        <li><i class="fas fa-check-circle"></i> 4 ounces high-quality semi-sweet chocolate</li>
+                        <li><i class="fas fa-check-circle"></i> 2 large eggs</li>
+                        <li><i class="fas fa-check-circle"></i> 2 large egg yolks</li>
+                        <li><i class="fas fa-check-circle"></i> 1/4 cup granulated sugar</li>
+                        <li><i class="fas fa-check-circle"></i> 2 tablespoons all-purpose flour</li>
+                        <li><i class="fas fa-check-circle"></i> 1/8 teaspoon salt</li>
+                        <li><i class="fas fa-check-circle"></i> Butter for ramekins</li>
+                        <li><i class="fas fa-check-circle"></i> Cocoa powder for dusting</li>
+                        <li><i class="fas fa-check-circle"></i> Powdered sugar for dusting</li>
+                        <li><i class="fas fa-check-circle"></i> Vanilla ice cream for serving</li>
+                    </ul>
+                </div>
+                <div class="instructions-section">
+                    <h3 class="section-title"><i class="fas fa-list-ol"></i> Instructions</h3>
+                    <ol class="instructions-list">
+                        <li>Preheat oven to 425°F (220°C). Butter 4 (6-ounce) ramekins and dust with cocoa powder.</li>
+                        <li>In a microwave-safe bowl, combine butter and chocolate. Microwave in 30-second intervals, stirring between each, until melted and smooth. Set aside to cool slightly.</li>
+                        <li>In a separate bowl, whisk together eggs, egg yolks, and sugar until pale and thick, about 3-4 minutes.</li>
+                        <li>Gently fold the melted chocolate mixture into the egg mixture until combined.</li>
+                        <li>Sift flour and salt over the chocolate mixture and fold gently until just combined.</li>
+                        <li>Divide the batter evenly among the prepared ramekins, filling about 3/4 full.</li>
+                        <li>Place ramekins on a baking sheet and bake for 12-14 minutes, until the edges are firm but the centers are soft.</li>
+                        <li>Remove from oven and let rest for 1 minute. Run a knife around the edges to loosen.</li>
+                        <li>Invert each ramekin onto a serving plate and carefully lift to release the cake.</li>
+                        <li>Dust with powdered sugar and serve immediately with vanilla ice cream.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Recipe 2 -->
+        <section class="recipe-detail">
+            <div class="recipe-hero">
+                <div class="recipe-image" style="background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="recipe-info">
+                    <h2>Berry Parfait</h2>
+                    <p class="recipe-description">A light and refreshing no-bake dessert with layers of creamy yogurt, crunchy granola, and fresh mixed berries. Perfect for a healthy treat or quick dessert that comes together in minutes.</p>
+                    <div class="recipe-meta-large">
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-clock"></i></div>
+                            <div class="meta-value">20 mins</div>
+                            <div class="meta-label">Prep Time</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-user-friends"></i></div>
+                            <div class="meta-value">2</div>
+                            <div class="meta-label">Servings</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-signal"></i></div>
+                            <div class="meta-value">Easy</div>
+                            <div class="meta-label">Difficulty</div>
+                        </div>
+                    </div>
+                    <div class="recipe-tags">
+                        <span class="tag">Fruit</span>
+                        <span class="tag">No-Bake</span>
+                        <span class="tag">Healthy</span>
+                        <span class="tag">Quick & Easy</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recipe-detail-content">
+                <div class="ingredients-section">
+                    <h3 class="section-title"><i class="fas fa-shopping-basket"></i> Ingredients</h3>
+                    <ul class="ingredients-list">
+                        <li><i class="fas fa-check-circle"></i> 1 cup Greek yogurt</li>
+                        <li><i class="fas fa-check-circle"></i> 2 tablespoons honey or maple syrup</li>
+                        <li><i class="fas fa-check-circle"></i> 1/2 teaspoon vanilla extract</li>
+                        <li><i class="fas fa-check-circle"></i> 1 cup mixed berries (strawberries, blueberries, raspberries)</li>
+                        <li><i class="fas fa-check-circle"></i> 1/2 cup granola</li>
+                        <li><i class="fas fa-check-circle"></i> 2 tablespoons chopped nuts (almonds, walnuts, or pecans)</li>
+                        <li><i class="fas fa-check-circle"></i> Fresh mint leaves for garnish (optional)</li>
+                    </ul>
+                </div>
+                <div class="instructions-section">
+                    <h3 class="section-title"><i class="fas fa-list-ol"></i> Instructions</h3>
+                    <ol class="instructions-list">
+                        <li>Wash and prepare the berries. If using strawberries, hull and slice them.</li>
+                        <li>In a small bowl, mix together the Greek yogurt, honey (or maple syrup), and vanilla extract until well combined.</li>
+                        <li>Take two serving glasses or bowls and start layering the ingredients.</li>
+                        <li>Begin with a layer of the yogurt mixture at the bottom of each glass.</li>
+                        <li>Add a layer of mixed berries on top of the yogurt.</li>
+                        <li>Sprinkle a layer of granola over the berries.</li>
+                        <li>Repeat the layers until the glasses are filled, ending with a yogurt layer on top.</li>
+                        <li>Sprinkle the chopped nuts over the top of each parfait.</li>
+                        <li>Garnish with a few fresh berries and mint leaves if desired.</li>
+                        <li>Serve immediately or refrigerate for up to 2 hours before serving.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Recipe Hub</h3>
+                    <p>Share and discover amazing recipes from around the world with our passionate community of food lovers.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="appetizers.html">Appetizers</a></li>
+                        <li><a href="#">Main Courses</a></li>
+                        <li><a href="desserts.html">Desserts</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Chocolate</a></li>
+                        <li><a href="#">Fruit</a></li>
+                        <li><a href="#">No-Bake</a></li>
+                        <li><a href="#">Vegan</a></li>
+                        <li><a href="#">Gluten-Free</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to get updates on new recipes and cooking tips.</p>
+                    <div style="display: flex; margin-top: 15px;">
+                        <input type="text" placeholder="Your email address" style="flex: 1; padding: 10px; border: none; border-radius: 4px 0 0 4px;">
+                        <button style="background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 0 4px 4px 0; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Recipe Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const recipeCards = document.querySelectorAll('.recipe-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Show/hide recipe cards based on filter
+                    recipeCards.forEach(card => {
+                        if (filterValue === 'all') {
+                            card.style.display = 'block';
+                        } else {
+                            const categories = card.getAttribute('data-category').split(' ');
+                            if (categories.includes(filterValue)) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Save recipe functionality
+            const saveButtons = document.querySelectorAll('.action-btn .fa-heart');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (this.classList.contains('far')) {
+                        this.classList.remove('far');
+                        this.classList.add('fas');
+                        this.style.color = 'red';
+                    } else {
+                        this.classList.remove('fas');
+                        this.classList.add('far');
+                        this.style.color = '';
+                    }
+                });
+            });
+            
+            // View recipe functionality
+            const viewButtons = document.querySelectorAll('.action-btn:last-child');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const recipeTitle = this.closest('.recipe-content').querySelector('h3').textContent;
+                    alert(`Opening recipe for: ${recipeTitle}`);
+                    // In a real application, this would navigate to the recipe page
+                });
+            });
+        });
+    </script>
+</body>
+</html>
