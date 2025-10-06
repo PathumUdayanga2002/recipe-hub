@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appetizers - Recipe Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #292f36;
+            --light: #f7fff7;
+            --accent: #ffe66d;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .filter-title {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 18px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        /* Recipe Grid */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .recipe-time {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .recipe-content {
+            padding: 20px;
+        }
+
+        .recipe-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .recipe-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .recipe-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Featured Recipe */
+        .featured-recipe {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 60px;
+            display: flex;
+        }
+
+        .featured-img {
+            flex: 1;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .featured-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-badge {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .featured-content h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .featured-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 36px;
+            }
+
+            .page-header p {
+                font-size: 18px;
+            }
+
+            .featured-recipe {
+                flex-direction: column;
+            }
+
+            .featured-img {
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Recipe Hub</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="appetizers.html" class="active">Appetizers</a>
+                    <a href="#">Main Courses</a>
+                    <a href="#">Desserts</a>
+                    <a href="#">About</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Login</button>
+                    <button class="btn btn-primary">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Appetizers & Starters</h1>
+            <p>Kick off your meal with these delicious and impressive starter recipes that are sure to wow your guests.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <section class="filters">
+            <h3 class="filter-title">Filter by:</h3>
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="vegetarian">Vegetarian</button>
+                <button class="filter-btn" data-filter="vegan">Vegan</button>
+                <button class="filter-btn" data-filter="gluten-free">Gluten-Free</button>
+                <button class="filter-btn" data-filter="quick">Quick & Easy</button>
+                <button class="filter-btn" data-filter="cheese">Cheese</button>
+                <button class="filter-btn" data-filter="dips">Dips & Spreads</button>
+            </div>
+        </section>
+
+        <!-- Featured Recipe -->
+        <section class="featured-recipe">
+            <div class="featured-img" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+            <div class="featured-content">
+                <span class="featured-badge">Chef's Choice</span>
+                <h2>Bruschetta with Tomato & Basil</h2>
+                <p>This classic Italian appetizer features toasted bread topped with fresh tomatoes, basil, garlic, and a drizzle of olive oil. Simple yet bursting with flavor, it's the perfect start to any meal.</p>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-clock"></i> 15 mins</span>
+                    <span><i class="fas fa-user"></i> 6 servings</span>
+                    <span><i class="fas fa-signal"></i> Easy</span>
+                </div>
+                <div class="recipe-tags">
+                    <span class="tag">Vegetarian</span>
+                    <span class="tag">Quick & Easy</span>
+                    <span class="tag">Italian</span>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 20px; align-self: flex-start;">View Recipe</button>
+            </div>
+        </section>
+
+        <!-- Recipe Grid -->
+        <section class="recipe-grid">
+            <div class="recipe-card" data-category="vegetarian quick cheese">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 20 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Caprese Skewers</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 8 servings</span>
+                        <span><i class="fas fa-signal"></i> Easy</span>
+                    </div>
+                    <p>Fresh mozzarella, cherry tomatoes, and basil leaves on skewers with a balsamic glaze.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Vegetarian</span>
+                        <span class="tag">Quick & Easy</span>
+                        <span class="tag">Cheese</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="vegan dips">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1611859265770-6e65e9266c8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 10 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Guacamole</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 4 servings</span>
+                        <span><i class="fas fa-signal"></i> Easy</span>
+                    </div>
+                    <p>Creamy avocado dip with lime, cilantro, and a hint of spice. Perfect with tortilla chips.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Vegan</span>
+                        <span class="tag">Quick & Easy</span>
+                        <span class="tag">Dips & Spreads</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="vegetarian cheese">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 30 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Spinach & Artichoke Dip</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 6 servings</span>
+                        <span><i class="fas fa-signal"></i> Medium</span>
+                    </div>
+                    <p>Creamy, cheesy dip with spinach and artichokes, served warm with bread or chips.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Vegetarian</span>
+                        <span class="tag">Cheese</span>
+                        <span class="tag">Dips & Spreads</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="gluten-free quick">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 25 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Stuffed Mushrooms</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 4 servings</span>
+                        <span><i class="fas fa-signal"></i> Easy</span>
+                    </div>
+                    <p>Mushroom caps filled with a savory mixture of herbs, breadcrumbs, and Parmesan cheese.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Gluten-Free</span>
+                        <span class="tag">Quick & Easy</span>
+                        <span class="tag">Vegetarian</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="vegan dips">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1570194065650-2f276eef1d6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 15 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Hummus Platter</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 6 servings</span>
+                        <span><i class="fas fa-signal"></i> Easy</span>
+                    </div>
+                    <p>Creamy homemade hummus served with fresh vegetables, olives, and pita bread.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Vegan</span>
+                        <span class="tag">Quick & Easy</span>
+                        <span class="tag">Dips & Spreads</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="vegetarian cheese">
+                <div class="recipe-img" style="background-image: url('https://images.unsplash.com/photo-1599921841143-4b34c59ae593?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    <span class="recipe-time"><i class="fas fa-clock"></i> 40 mins</span>
+                </div>
+                <div class="recipe-content">
+                    <h3>Baked Brie with Honey</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-user"></i> 8 servings</span>
+                        <span><i class="fas fa-signal"></i> Medium</span>
+                    </div>
+                    <p>Warm, melted brie cheese topped with honey, nuts, and served with crackers.</p>
+                    <div class="recipe-tags">
+                        <span class="tag">Vegetarian</span>
+                        <span class="tag">Cheese</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="action-btn"><i class="far fa-heart"></i> Save</button>
+                        <button class="action-btn">View Recipe <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Recipe Hub</h3>
+                    <p>Share and discover amazing recipes from around the world with our passionate community of food lovers.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="appetizers.html">Appetizers</a></li>
+                        <li><a href="#">Main Courses</a></li>
+                        <li><a href="#">Desserts</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Vegetarian</a></li>
+                        <li><a href="#">Vegan</a></li>
+                        <li><a href="#">Gluten-Free</a></li>
+                        <li><a href="#">Quick & Easy</a></li>
+                        <li><a href="#">Holiday Recipes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to get updates on new recipes and cooking tips.</p>
+                    <div style="display: flex; margin-top: 15px;">
+                        <input type="text" placeholder="Your email address" style="flex: 1; padding: 10px; border: none; border-radius: 4px 0 0 4px;">
+                        <button style="background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 0 4px 4px 0; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Recipe Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const recipeCards = document.querySelectorAll('.recipe-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Show/hide recipe cards based on filter
+                    recipeCards.forEach(card => {
+                        if (filterValue === 'all') {
+                            card.style.display = 'block';
+                        } else {
+                            const categories = card.getAttribute('data-category').split(' ');
+                            if (categories.includes(filterValue)) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Save recipe functionality
+            const saveButtons = document.querySelectorAll('.action-btn .fa-heart');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (this.classList.contains('far')) {
+                        this.classList.remove('far');
+                        this.classList.add('fas');
+                        this.style.color = 'red';
+                    } else {
+                        this.classList.remove('fas');
+                        this.classList.add('far');
+                        this.style.color = '';
+                    }
+                });
+            });
+            
+            // View recipe functionality
+            const viewButtons = document.querySelectorAll('.action-btn:last-child');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const recipeTitle = this.closest('.recipe-content').querySelector('h3').textContent;
+                    alert(`Opening recipe for: ${recipeTitle}`);
+                    // In a real application, this would navigate to the recipe page
+                });
+            });
+        });
+    </script>
+</body>
+</html>
